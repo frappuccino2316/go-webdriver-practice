@@ -15,14 +15,15 @@ import (
 
 func main() {
 	var binaryName string
+	var command *exec.Cmd
 
 	if runtime.GOOS == "windows" {
 		binaryName = "chromedriver.exe"
+		command = exec.Command("start", binaryName)
 	} else {
 		binaryName = "chromedriver"
+		command = exec.Command(binaryName)
 	}
-
-	command := exec.Command(binaryName)
 
 	fmt.Println("run & start")
 	if err := command.Start(); err != nil {
@@ -31,7 +32,9 @@ func main() {
 	}
 	defer kill(command)
 
-	time.Sleep(time.Second * 10)
+	fmt.Println("wait start")
+
+	time.Sleep(time.Second * 5)
 
 	// ===post===
 
@@ -76,7 +79,7 @@ func main() {
 		fmt.Printf("Unmarshal Error! %v\n", err)
 		return
 	}
-	fmt.Println(data)
+	fmt.Println(data.Values.SessionId)
 
 	// data := map[string]string{
 	// 	"sessionId": "",
