@@ -72,32 +72,16 @@ func main() {
 		fmt.Printf("ReadAll Error! %v\n", err)
 		return
 	}
-	fmt.Println(string(body))
 
 	var data SessionResponse
 	if err := json.Unmarshal(body, &data); err != nil {
 		fmt.Printf("Unmarshal Error! %v\n", err)
 		return
 	}
+	fmt.Println(data)
 	fmt.Println(data.Values.SessionId)
 
-	// data := map[string]string{
-	// 	"sessionId": "",
-	// }
-
-	// jsonRes, err := json.Marshal(res.Body)
-	// if err != nil {
-	// 	return
-	// }
-
-	// err = json.Unmarshal(jsonRes, &data)
-	// if err != nil {
-	// 	return
-	// }
-
-	// fmt.Printf("%v\n", data)
-
-	// time.Sleep(time.Second * 6)
+	time.Sleep(time.Second * 5)
 
 	// 	// =========close=========
 
@@ -140,25 +124,25 @@ type SessionResponse struct {
 }
 
 type Value struct {
-	Capabilities
+	// Capabilities
 	SessionId string `json:"sessionId"`
 }
 
-type Capabilities struct {
-	acceptInsecureCerts       bool
-	browserName               string
-	browserVersion            string
-	chrome                    map[string]string
-	goog                      map[string]string `json:"goog:chromeOptions"`
-	networkConnectionEnabled  bool
-	pageLoadStrategy          string
-	platformName              string
-	proxy                     map[string]string
-	setWindowRect             bool
-	strictFileInteractability bool
-	timeouts                  map[string]int
-	unhandledPromptBehavior   string
-	credBlob                  bool `json:"webauthn:extension:credBlob"`
-	largeBlob                 bool `json:"webauthn:extension:largeBlob"`
-	virtualAuthenticators     bool `json:"webauthn:virtualAuthenticators"`
-}
+// type Capabilities struct {
+// 	acceptInsecureCerts       bool
+// 	browserName               string
+// 	browserVersion            string
+// 	chrome                    map[string]string
+// 	goog                      map[string]string `json:"goog:chromeOptions"`
+// 	networkConnectionEnabled  bool
+// 	pageLoadStrategy          string
+// 	platformName              string
+// 	proxy                     map[string]string
+// 	setWindowRect             bool
+// 	strictFileInteractability bool
+// 	timeouts                  map[string]int
+// 	unhandledPromptBehavior   string
+// 	credBlob                  bool `json:"webauthn:extension:credBlob"`
+// 	largeBlob                 bool `json:"webauthn:extension:largeBlob"`
+// 	virtualAuthenticators     bool `json:"webauthn:virtualAuthenticators"`
+// }
