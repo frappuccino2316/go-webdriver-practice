@@ -119,6 +119,10 @@ func kill(command *exec.Cmd) {
 	}
 }
 
+type WebDriver struct {
+	SessionId string
+}
+
 type SessionResponse struct {
 	Values Value `json:"value"`
 }
