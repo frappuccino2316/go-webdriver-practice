@@ -1,21 +1,19 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"io"
 	"net/http"
 	"os/exec"
 	"runtime"
-	"strings"
-	"time"
+
+	"prawd/api"
 )
 
 type WebDriver struct {
 	SessionID string
+	Client    *http.Client
 }
 
-type sessionResponse struct {
+type SessionResponse struct {
 	Value struct {
 		SessionID    string      `json:"sessionId"`
 		Capabilities interface{} `json:"capabilities"`
@@ -38,46 +36,23 @@ func NewDriver() (WebDriver, error) {
 		return WebDriver{}, err
 	}
 
-	startUrl := "http://localhost:9515/session"
-
-	cap := `
-{
-	"capabilities": {
-		"alwaysMatch": {
-			"goog:chromeOptions": {
-				"args": ["--no-sandbox"]
-			}
-		}
-	}
-}
-`
-
-	req, err := http.NewRequest("POST", startUrl, strings.NewReader(cap))
-
-	if err != nil {
-		return WebDriver{}, err
-	}
-
 	client := new(http.Client)
-	res, err := client.Do(req)
+
+	sessionID, err := api.NewSession(client)
+
 	if err != nil {
-		return WebDriver{}, err
+		return WebDriver{}, nil
 	}
-	defer res.Body.Close()
 
-	body, err := io.ReadAll(res.Body)
+	return WebDriver{SessionID: sessionID, Client: client}, nil
+}
+
+func (wd WebDriver) Close() error {
+	err := api.DeleteSession(wd.Client, wd.SessionID)
+
 	if err != nil {
-		fmt.Printf("ReadAll Error! %v\n", err)
-		return WebDriver{}, err
+		return err
 	}
 
-	var data sessionResponse
-	if err := json.Unmarshal(body, &data); err != nil {
-		return WebDriver{}, err
-	}
-
-	time.Sleep(time.Second * 5)
-
-	driver := WebDriver{SessionID: data.Value.SessionID}
-	return driver, nil
+	return nil
 }
