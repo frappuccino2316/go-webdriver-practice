@@ -9,7 +9,8 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
-	"syscall"
+
+	// "syscall"
 	"time"
 )
 
@@ -30,7 +31,13 @@ func main() {
 		fmt.Println("error start")
 		return
 	}
-	defer kill(command)
+	// defer func() {
+	// 	if runtime.GOOS == "windows" {
+	// 		command.Process.Kill()
+	// 	} else {
+	// 		command.Process.Signal(syscall.SIGTERM)
+	// 	}
+	// }()
 
 	fmt.Println("wait start")
 
@@ -109,18 +116,6 @@ func main() {
 	defer res.Body.Close()
 
 	fmt.Println("finish")
-}
-
-func kill(command *exec.Cmd) {
-	if runtime.GOOS == "windows" {
-		command.Process.Kill()
-	} else {
-		command.Process.Signal(syscall.SIGTERM)
-	}
-}
-
-type WebDriver struct {
-	SessionId string
 }
 
 type SessionResponse struct {
