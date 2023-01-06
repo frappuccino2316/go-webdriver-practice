@@ -16,7 +16,7 @@ type sessionResponse struct {
 }
 
 func NewSession(client *http.Client) (string, error) {
-	startUrl := "http://localhost:9515/session"
+	startURL := "http://localhost:9515/session"
 
 	cap := `
 {
@@ -30,7 +30,7 @@ func NewSession(client *http.Client) (string, error) {
 }
 `
 
-	req, err := http.NewRequest("POST", startUrl, strings.NewReader(cap))
+	req, err := http.NewRequest("POST", startURL, strings.NewReader(cap))
 
 	if err != nil {
 		return "", err
