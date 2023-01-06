@@ -54,3 +54,22 @@ func NewSession(client *http.Client) (string, error) {
 
 	return data.Value.SessionID, nil
 }
+
+func DeleteSession(client *http.Client, sessionID string) error {
+	closeURL := fmt.Sprintf("http://localhost:9515/session/%v", sessionID)
+
+	params := "{}"
+	req, err := http.NewRequest("POST", closeURL, strings.NewReader(params))
+
+	if err != nil {
+		return err
+	}
+
+	res, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	defer res.Body.Close()
+
+	return nil
+}
